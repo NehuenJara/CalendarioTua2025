@@ -56,3 +56,6 @@ type Config = {
 export const vercelConfig: Config = {
   routes: [{ src: "/(.*)", dest: "/index.html" }],
 };
+git add vercel.json
+git commit -m "Corrigiendo rutas en Vercel"
+git push origin main
