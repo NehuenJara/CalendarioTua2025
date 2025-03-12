@@ -1,0 +1,58 @@
+import { useState } from "react";
+import { Tooltip } from "@/components/ui/tooltip";
+
+const eventos = {
+  "2025-03-17": { materia: "Economía I", evento: "Foro Unidad 1", hora: "", vencimiento: "24/03/2025" },
+  "2025-03-19": { materia: "Estadística", evento: "Cuestionario 1", hora: "", vencimiento: "24/03/2025" },
+  "2025-03-21": { materia: "Estadística", evento: "AVS", hora: "18:30" },
+  "2025-03-25": { materia: "Administración II", evento: "Foro Unidad 1-2", hora: "", vencimiento: "30/03/2025" },
+  "2025-04-11": { materia: "Economía I", evento: "Foro Unidad 4", hora: "", vencimiento: "18/04/2025" },
+};
+
+const Calendar = () => {
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const renderCalendar = () => {
+    let days = [];
+    for (let i = 1; i <= 30; i++) {
+      let dateKey = `2025-03-${String(i).padStart(2, "0")}`;
+      let evento = eventos[dateKey];
+      days.push(
+        <Tooltip key={i} content={evento ? `${evento.materia} - ${evento.evento} ${evento.hora ? `a las ${evento.hora} hs` : ""}` : ""}>
+          <div
+            className={`w-10 h-10 flex items-center justify-center border rounded-lg cursor-pointer ${evento ? "bg-blue-500 text-white" : "bg-gray-100"}`}
+            onClick={() => setSelectedDate(evento)}
+          >
+            {i}
+          </div>
+        </Tooltip>
+      );
+    }
+    return days;
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-xl font-bold text-center mb-4">Calendario Interactivo - Marzo 2025</h1>
+      <div className="grid grid-cols-7 gap-2">{renderCalendar()}</div>
+      {selectedDate && (
+        <div className="mt-4 p-4 bg-gray-200 rounded-lg">
+          <h2 className="font-semibold">{selectedDate.materia}</h2>
+          <p>{selectedDate.evento} {selectedDate.hora ? `a las ${selectedDate.hora} hs` : ""}</p>
+          {selectedDate.vencimiento && <p>Vence: {selectedDate.vencimiento}</p>}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Calendar;
+
+// Agregar configuración para Vercel
+type Config = {
+  routes: { src: string; dest: string }[];
+};
+
+export const vercelConfig: Config = {
+  routes: [{ src: "/(.*)", dest: "/index.html" }],
+};
